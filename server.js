@@ -15,7 +15,7 @@ const sorters = {
     mass: { comparator: numComparator('mass') },
 }
 
-async function getPeople(sorter) {
+async function getPeople() {
     let next = 'https://swapi.co/api/people';
     const people = {
         list: [],
@@ -29,17 +29,22 @@ async function getPeople(sorter) {
             people.map[person.url] = person;
         });
     }
-    if (sorter) {
-        people.list.sort(sorter.comparator);
-    }
     return people;
 }
+
+const peoplePromise = getPeople();
 
 app.get('/people', (req, res) =>  {
     const sorter = sorters[req.query.sortBy];
 
-    getPeople(sorter).then(people => {
-        res.send(people.list);
+    peoplePromise.then(people => {
+        if (sorter) {
+            const peopleList = [...people.list];
+            peopleList.sort(sorter.comparator);
+            res.send(peopleList);
+        } else {
+            res.send(people.list);
+        }
     })
 });
 
@@ -59,10 +64,10 @@ async function getPlanets(people) {
     return planets;
 }
 
+const planetsPromise = peoplePromise.then(getPlanets);
+
 app.get('/planets', (req, res) =>  {
-    getPeople()
-    .then(getPlanets)
-    .then(planets => {
+    planetsPromise.then(planets => {
         res.json(planets)
     })
 });
