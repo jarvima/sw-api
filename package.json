@@ -1,0 +1,19 @@
+{
+  "name": "sw-api",
+  "version": "1.0.0",
+  "description": "Api enpoints using swapi.co",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jarvima/sw-api.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "axios": "^0.18.0"
+  }
+}
